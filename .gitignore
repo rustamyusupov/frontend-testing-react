@@ -1,0 +1,6 @@
+# WARNING: Paths must not include the name of the "lessons" directory.
+# Outside, this directory is called "exercises".
+
+node_modules
+/*/*/**/package-lock.json
+/tmp/
