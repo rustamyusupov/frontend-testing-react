@@ -8,6 +8,14 @@ describe('object assign', () => {
     expect(result).toEqual(expected);
   });
 
+  it('should return target object', () => {
+    const src = {};
+    const target = { a: 1 };
+    const result = Object.assign(target, src);
+
+    expect(result).toBe(target);
+  });
+
   it('should return nested object', () => {
     const src = { a: 1, b: { c: 2 } };
     const target = { d: 'test', e: { f: { g: 123 } } };
@@ -39,6 +47,18 @@ describe('object assign', () => {
     };
 
     expect(result).toEqual(expected);
+  });
+
+  it('should return error for read property', () => {
+    const src = { a: 2 };
+    const target = Object.defineProperty({}, 'a', {
+      value: 1,
+      writable: false,
+    });
+    const result = () => Object.assign(target, src);
+    const expected = TypeError;
+
+    expect(result).toThrow(expected);
   });
 
   it('should return empty object', () => {
