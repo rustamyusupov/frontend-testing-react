@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 // BEGIN
-const increment = (version, part) => {
+const increment = (version, part = 'patch') => {
   const splitted = version.split('.').map(Number);
 
   switch (part) {
@@ -16,8 +16,11 @@ const increment = (version, part) => {
       splitted[2] = 0;
       break;
 
-    default:
+    case 'patch':
       splitted[2] += 1;
+      break;
+
+    default:
       break;
   }
 

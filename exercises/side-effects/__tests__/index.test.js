@@ -39,6 +39,15 @@ describe('side-effects upVersion', () => {
     expect(result).toBe(expected);
   });
 
+  it('should return without changes for unknown part', () => {
+    upVersion(tempPath, 'test');
+
+    const result = getVersion(tempPath);
+    const expected = pj.version;
+
+    expect(result).toBe(expected);
+  });
+
   it('should return type error for file without version', () => {
     expect(() => upVersion('../package.json')).toThrow(TypeError);
   });
