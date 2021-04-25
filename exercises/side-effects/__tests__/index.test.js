@@ -1,12 +1,10 @@
-const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
 const { upVersion } = require('../src/index.js');
-const pj = require('../__fixtures__/package.json');
 
-const tempDir = os.tmpdir();
-const tempPath = path.join(tempDir, 'package.json');
+const pjPath = path.join(__dirname, '../__fixtures__/package.json');
+const originalState = '{"version":"1.3.2"}';
 
 const getVersion = (filePath) => {
   const data = fs.readFileSync(filePath, 'utf8');
@@ -16,43 +14,39 @@ const getVersion = (filePath) => {
 };
 
 describe('side-effects upVersion', () => {
-  beforeEach(() => fs.writeFileSync(tempPath, JSON.stringify(pj)));
+  afterEach(() => fs.writeFileSync(pjPath, originalState));
 
   test.each([
     ['major', '2.0.0'],
     ['minor', '1.4.0'],
     ['patch', '1.3.3'],
   ])('should return updated %s', (part, expected) => {
-    upVersion(tempPath, part);
+    upVersion(pjPath, part);
 
-    const result = getVersion(tempPath);
+    const result = getVersion(pjPath);
 
     expect(result).toBe(expected);
   });
 
   it('should return updated patch as default', () => {
-    upVersion(tempPath);
+    upVersion(pjPath);
 
-    const result = getVersion(tempPath);
+    const result = getVersion(pjPath);
     const expected = '1.3.3';
 
     expect(result).toBe(expected);
   });
 
   it('should return without changes for unknown part', () => {
-    upVersion(tempPath, 'test');
+    upVersion(pjPath, 'test');
 
-    const result = getVersion(tempPath);
-    const expected = pj.version;
+    const result = getVersion(pjPath);
+    const expected = '1.3.2';
 
     expect(result).toBe(expected);
   });
 
-  it('should return type error for file without version', () => {
-    expect(() => upVersion('../package.json')).toThrow(TypeError);
-  });
-
-  it('should return type error without args', () => {
-    expect(() => upVersion()).toThrow(TypeError);
+  it('should return error without args', () => {
+    expect(() => upVersion()).toThrow(Error);
   });
 });

@@ -2,29 +2,21 @@ const fs = require('fs');
 
 // BEGIN
 const increment = (version, part = 'patch') => {
-  const splitted = version.split('.').map(Number);
+  const [major, minor, patch] = version.split('.').map(Number);
 
   switch (part) {
     case 'major':
-      splitted[0] += 1;
-      splitted[1] = 0;
-      splitted[2] = 0;
-      break;
+      return `${major + 1}.0.0`;
 
     case 'minor':
-      splitted[1] += 1;
-      splitted[2] = 0;
-      break;
+      return `${major}.${minor + 1}.0`;
 
     case 'patch':
-      splitted[2] += 1;
-      break;
+      return `${major}.${minor}.${patch + 1}`;
 
     default:
-      break;
+      return version;
   }
-
-  return splitted.join('.');
 };
 
 const upVersion = (path, part) => {
@@ -35,7 +27,7 @@ const upVersion = (path, part) => {
 
     fs.writeFileSync(path, JSON.stringify({ version }));
   } catch (error) {
-    throw new TypeError(error);
+    throw new Error(error);
   }
 };
 // END
