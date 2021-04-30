@@ -12,7 +12,7 @@ const cases = [
   [[], undefined, [], 'empty array'],
 ];
 
-cases.forEach(([data, depth, expected, description]) =>
-  assert.deepEqual(flattenDepth(data, depth), expected, description)
-);
+cases.forEach(([data, depth, expected, description]) => {
+  assert.deepEqual(flattenDepth(data, depth), expected, description);
+});
 // END
