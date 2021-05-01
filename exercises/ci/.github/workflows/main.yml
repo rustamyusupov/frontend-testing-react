@@ -1,5 +1,5 @@
 # BEGIN
-name: test-coverage
+name: main
 
 on:
   push:
@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
 
     steps:
       - uses: actions/checkout@v2
