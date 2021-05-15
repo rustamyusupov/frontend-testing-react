@@ -7,3 +7,4 @@ node_modules
 presentation.html
 presentation.pdf
 .DS_Store
+/.cache
