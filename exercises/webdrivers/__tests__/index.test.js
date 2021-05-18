@@ -30,25 +30,27 @@ describe('it works', () => {
   });
   // BEGIN
   it('should open main page', async () => {
-    const response = await page.goto(appUrl, { waitUntil: 'load' });
-    const result = response.status();
-    const expected = serverResponse.ok;
+    await page.goto(appUrl);
+    const title = await page.$('#title');
+    const result = await page.evaluate((el) => el.innerText, title);
+    const expected = 'Welcome to a Simple blog!';
 
-    expect(result).toBe(expected);
+    expect(result).toContain(expected);
   });
 
-  it('should navigate to articles', async () => {
-    await page.goto(appUrl, { waitUntil: 'networkidle0' });
-    await Promise.all([page.waitForNavigation(), page.click('.nav-link')]);
-    const result = await page.$('#articles');
+  it('should return articles', async () => {
+    await page.goto(`${appUrl}/articles`);
+    const articles = await page.$$('#articles tr');
+    const result = articles.length;
+    const expected = 0;
 
-    expect(result).toBeTruthy();
+    expect(result).toBeGreaterThan(expected);
   });
 
   it('should open form', async () => {
     await page.goto(`${appUrl}/articles`);
-    await Promise.all([page.waitForNavigation(), page.click('body > div > a')]);
-    const result = await page.$('form');
+    await page.click('body > div > a');
+    const result = await page.waitForSelector('form');
 
     expect(result).toBeTruthy();
   });
@@ -61,10 +63,8 @@ describe('it works', () => {
     await page.type('#name', name);
     await page.type('#category', 'optio quo quis');
     await page.type('#content', content);
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click('input[type=submit]'),
-    ]);
+    await page.click('input[type=submit]');
+    await page.waitForSelector('#articles');
     const result = await page.$eval(
       'tbody > tr:last-child > td:nth-child(2)',
       (el) => el.innerText,
@@ -77,17 +77,11 @@ describe('it works', () => {
     const name = faker.lorem.sentence();
 
     await page.goto(`${appUrl}/articles`);
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a'),
-    ]);
+    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a'),
     // eslint-disable-next-line no-param-reassign
     await page.$eval('#name', (el) => { el.value = ''; });
     await page.type('#name', name);
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click('input[type=submit]'),
-    ]);
+    await page.click('input[type=submit]');
     const result = await page.$eval(
       'tbody > tr:nth-child(1) > td:nth-child(2)',
       (el) => el.innerText,
@@ -95,7 +89,6 @@ describe('it works', () => {
 
     expect(result).toBe(name);
   });
-
   // END
   afterAll(async () => {
     await browser.close();
