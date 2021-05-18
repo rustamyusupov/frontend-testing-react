@@ -5,9 +5,6 @@ const getApp = require('../server/index.js');
 
 const port = 5001;
 const appUrl = `http://localhost:${port}`;
-const serverResponse = {
-  ok: 200,
-};
 
 let browser;
 let page;
@@ -77,7 +74,7 @@ describe('it works', () => {
     const name = faker.lorem.sentence();
 
     await page.goto(`${appUrl}/articles`);
-    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a'),
+    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a');
     // eslint-disable-next-line no-param-reassign
     await page.$eval('#name', (el) => { el.value = ''; });
     await page.type('#name', name);
