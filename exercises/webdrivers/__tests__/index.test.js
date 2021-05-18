@@ -75,10 +75,12 @@ describe('it works', () => {
 
     await page.goto(`${appUrl}/articles`);
     await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a');
+    await page.waitForSelector('#edit-form');
     // eslint-disable-next-line no-param-reassign
     await page.$eval('#name', (el) => { el.value = ''; });
     await page.type('#name', name);
     await page.click('input[type=submit]');
+    await page.waitForSelector('#articles');
     const result = await page.$eval(
       'tbody > tr:nth-child(1) > td:nth-child(2)',
       (el) => el.innerText,
