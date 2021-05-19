@@ -43,7 +43,7 @@ describe('simple blog', () => {
       'article[name]': name,
       'article[content]': content,
     });
-    await expect(page).toSelect('data-testid="article-category"', '1');
+    await expect(page).toSelect('[data-testid="article-category"]', '1');
     await expect(page).toClick('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
