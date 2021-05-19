@@ -57,6 +57,7 @@ describe('simple blog', () => {
     await page.click(
       '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
     );
+    await page.waitForSelector('[data-testid="article-edit-form"]');
     await expect(page).toFill('#name', name);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
