@@ -54,12 +54,11 @@ describe('simple blog', () => {
     const name = faker.lorem.sentence();
 
     await page.goto(`${appUrl}/articles`);
-    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a');
-    await page.waitForSelector('#edit-form');
-    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
+    await page.click('[data-testid="article"]:nth-child(1)>td:nth-child(4)>a');
+    await expect(page).toFillForm('form[data-testid="article-edit-form"]', {
       'article[name]': name,
     });
-    await expect(page).toClick('[data-testid="article-create-button"]');
+    await expect(page).toClick('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
     expect(page).toMatch(name);
