@@ -9,7 +9,7 @@ block content
     form.mt-3(action=route('article', { id: article.id}) method="post" data-testid="article-edit-form")
       .form-group
         label(for="name") Name
-        input.form-control(id="name" name="article[name]" value= article.name)
+        input.form-control(id="name" name="article[name]" value= article.name data-testid="article-name")
       .form-group
         label(for="category") Category
         select.form-control(id="category" name="article[categoryId]" data-testid="article-category")

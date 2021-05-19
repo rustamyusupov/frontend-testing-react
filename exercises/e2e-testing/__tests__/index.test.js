@@ -57,8 +57,8 @@ describe('simple blog', () => {
     await page.click(
       '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
     );
-    await page.$eval('#name', (el) => { el.value = ''; });
-    await expect(page).toFill('#name', name);
+    await page.$eval('[data-testid="article-name"]', (el) => { el.value = ''; });
+    await expect(page).toFill('[data-testid="article-name"]', name);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
   
