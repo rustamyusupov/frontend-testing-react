@@ -51,14 +51,27 @@ describe('simple blog', () => {
   });
 
   it('should edit article', async () => {
+    // const name = faker.lorem.sentence();
+
+    // await page.goto(`${appUrl}/articles`);
+    // await page.click(
+    //   '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
+    // );
+    // await page.waitForSelector('[data-testid="article-edit-form"]');
+    // await expect(page).toFill('[data-testid="article-name"]', name);
+    // await page.click('[data-testid="article-update-button"]');
+    // await page.waitForSelector('[data-testid="articles"]');
+
+    // expect(page).toMatch(name);
     const name = faker.lorem.sentence();
 
     await page.goto(`${appUrl}/articles`);
     await page.click(
       '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
     );
-    await page.waitForSelector('[data-testid="article-edit-form"]');
-    await expect(page).toFill('[data-testid="article-name"]', name);
+    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
+      'article[name]': name,
+    });
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
