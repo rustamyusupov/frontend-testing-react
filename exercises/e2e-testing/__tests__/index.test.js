@@ -73,7 +73,7 @@ describe('simple blog', () => {
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
-    expect(page).toMatch(name);
+    expect(page).toMatch(newName);
   });
 });
 // END
