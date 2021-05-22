@@ -50,35 +50,19 @@ describe('simple blog', () => {
     expect(page).toMatch(name);
   });
 
-  it('should edit article', async () => {
-    const name = faker.lorem.sentence();
+  // it('should edit article', async () => {
+  //   const name = faker.lorem.sentence();
 
-    await page.goto(`${appUrl}/articles`);
-    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a');
-    await page.waitForSelector('#edit-form');
-    // eslint-disable-next-line no-param-reassign
-    await page.$eval('#name', (el) => { el.value = ''; });
-    await page.type('#name', name);
-    await page.click('input[type=submit]');
-    await page.waitForSelector('#articles');
-    const result = await page.$eval(
-      'tbody > tr:nth-child(1) > td:nth-child(2)',
-      (el) => el.innerText,
-    );
+  //   await page.goto(`${appUrl}/articles`);
+  //   await page.click(
+  //     '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
+  //   );
+  //   await page.waitForSelector('[data-testid="article-edit-form"]');
+  //   await expect(page).toFill('[data-testid="article-name"]', name);
+  //   await page.click('[data-testid="article-update-button"]');
+  //   await page.waitForSelector('[data-testid="articles"]');
 
-    expect(result).toBe(name);
-    // const name = faker.lorem.sentence();
-
-    // await page.goto(`${appUrl}/articles`);
-    // await page.click(
-    //   '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
-    // );
-    // await page.waitForSelector('[data-testid="article-edit-form"]');
-    // await expect(page).toFill('[data-testid="article-name"]', name);
-    // await page.click('[data-testid="article-update-button"]');
-    // await page.waitForSelector('[data-testid="articles"]');
-
-    // expect(page).toMatch(name);
-  });
+  //   expect(page).toMatch(name);
+  // });
 });
 // END
