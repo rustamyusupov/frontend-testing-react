@@ -31,7 +31,7 @@ describe('simple blog', () => {
     await page.click('[data-testid="article-create-link"]');
     const result = await page.waitForSelector('[data-testid="article-create-form"]');
 
-    expect(result).toBeTruthy();
+    expect(result).resolves.toBeTruthy();
   });
 
   it('should create new article', async () => {
