@@ -52,15 +52,24 @@ describe('simple blog', () => {
 
   it('should edit article', async () => {
     const name = faker.lorem.sentence();
+    const content = faker.lorem.paragraph();
 
-    await page.goto(`${appUrl}/articles`);
-    await page.click('tbody > tr:nth-child(1) > td:nth-child(4) > a');
+    await page.goto(`${appUrl}/articles/new`);
+    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
+      'article[name]': name,
+      'article[content]': content,
+    });
+    await expect(page).toSelect('[data-testid="article-category"]', '1');
+    await expect(page).toClick('[data-testid="article-create-button"]');
+    await page.waitForSelector('[data-testid="articles"]');
+
+    const newName = faker.lorem.sentence();
+
+    await page.click(
+      '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
+    );
     await page.waitForSelector('[data-testid="article-edit-form"]');
-    // await page.click(
-    //   '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
-    // );
-    // await page.waitForSelector('[data-testid="article-edit-form"]');
-    await expect(page).toFill('[data-testid="article-name"]', name);
+    await expect(page).toFill('[data-testid="article-name"]', newName);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
