@@ -21,7 +21,7 @@ block content
           tr(data-testid="article")
             td= article.id
             td= article.name
-            td(data-testid="article-category")= _.find(categories, ['id', article.categoryId]).name
+            td= _.find(categories, ['id', article.categoryId]).name
             td
               a(
                 href=route('editArticle', { id: article.id })

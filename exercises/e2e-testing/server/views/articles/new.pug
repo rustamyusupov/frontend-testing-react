@@ -12,7 +12,7 @@ block content
         input.form-control(id="name" name="article[name]")
       .form-group
         label(for="category") Category
-        select.form-control(id="category" name="article[categoryId]" data-testid="article-category")
+        select.form-control(id="category" name="article[categoryId]")
           option -----
           each category in categories
             option(value= category.id)= category.name
