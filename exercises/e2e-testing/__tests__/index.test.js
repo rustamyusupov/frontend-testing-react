@@ -26,7 +26,7 @@ describe('simple blog', () => {
   it('should open form', async () => {
     await page.goto(`${appUrl}/articles`);
     await page.click('[data-testid="article-create-link"]');
-    await page.waitForSelector('[data-testid="new-article-form"]');
+    await page.waitForSelector('[data-testid="article-create-form"]');
     const expected = 'Create article';
 
     await expect(page).toMatch(expected);
@@ -53,7 +53,7 @@ describe('simple blog', () => {
     const content = faker.lorem.paragraph();
 
     await page.goto(`${appUrl}/articles/new`);
-    await expect(page).toFillForm('form[data-testid="new-article-form"]', {
+    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
       'article[name]': name,
       'article[content]': content,
     });
@@ -65,7 +65,7 @@ describe('simple blog', () => {
 
     const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
     await page.goto(`${appUrl}/articles/${id}/edit`);
-    await expect(page).toFill('[data-testid="article-name"]', newName);
+    await expect(page).toFill('#name', newName);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
