@@ -19,7 +19,7 @@ block content
       tbody
         each article in articles
           tr(data-testid="article")
-            td= article.id
+            td(data-testid="article-id")= article.id
             td= article.name
             td= _.find(categories, ['id', article.categoryId]).name
             td

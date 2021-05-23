@@ -26,6 +26,7 @@ describe('simple blog', () => {
   it('should open form', async () => {
     await page.goto(`${appUrl}/articles`);
     await page.click('[data-testid="article-create-link"]');
+    await page.waitForSelector('[data-testid="new-article-form"]');
     const expected = 'Create article';
 
     await expect(page).toMatch(expected);
@@ -42,24 +43,33 @@ describe('simple blog', () => {
     });
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await expect(page).toClick('[data-testid="article-create-button"]');
-    await page.waitForNavigation();
+    await page.waitForSelector('[data-testid="articles"]');
 
     expect(page).toMatch(name);
   });
 
-  // it('should edit article', async () => {
-  //   const name = faker.lorem.sentence();
+  it('should edit article', async () => {
+    const name = faker.lorem.sentence();
+    const content = faker.lorem.paragraph();
 
-  //   await page.goto(`${appUrl}/articles`);
-  //   await page.click(
-  //     '[data-testid="article"]:first-child [data-testid^="article-edit-link"]',
-  //   );
-  //   await page.waitForSelector('[data-testid="article-edit-form"]');
-  //   await expect(page).toFill('[data-testid="article-name"]', newName);
-  //   await page.click('[data-testid="article-update-button"]');
-  //   await page.waitForSelector('[data-testid="articles"]');
+    await page.goto(`${appUrl}/articles/new`);
+    await expect(page).toFillForm('form[data-testid="new-article-form"]', {
+      'article[name]': name,
+      'article[content]': content,
+    });
+    await expect(page).toSelect('[name="article[categoryId]"]', '1');
+    await expect(page).toClick('[data-testid="article-create-button"]');
+    await page.waitForSelector('[data-testid="articles"]');
 
-  //   expect(page).toMatch(newName);
-  // });
+    const newName = faker.lorem.sentence();
+
+    const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
+    await page.goto(`${appUrl}/articles/${id}/edit`);
+    await expect(page).toFill('[data-testid="article-name"]', newName);
+    await page.click('[data-testid="article-update-button"]');
+    await page.waitForSelector('[data-testid="articles"]');
+
+    expect(page).toMatch(newName);
+  });
 });
 // END
