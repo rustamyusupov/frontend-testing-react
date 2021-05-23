@@ -50,26 +50,13 @@ describe('simple blog', () => {
 
   it('should edit article', async () => {
     const name = faker.name.title();
-    const content = faker.lorem.paragraph();
 
-    await page.goto(`${appUrl}/articles/new`);
-    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
-      'article[name]': name,
-      'article[content]': content,
-    });
-    await expect(page).toSelect('[name="article[categoryId]"]', '1');
-    await expect(page).toClick('[data-testid="article-create-button"]');
-    await page.waitForSelector('[data-testid="articles"]');
-
-    const newName = faker.name.title();
-
-    const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
-    await page.goto(`${appUrl}/articles/${id}/edit`);
-    await expect(page).toFill('#name', newName);
+    await page.goto(`${appUrl}/articles/4/edit`);
+    await expect(page).toFill('#name', name);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
-    await expect(page).toMatch(newName);
+    await expect(page).toMatch(name);
   });
 });
 // END
