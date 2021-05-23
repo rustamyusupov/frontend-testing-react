@@ -66,7 +66,7 @@ describe('simple blog', () => {
     const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
     await page.goto(`${appUrl}/articles/${id}/edit`);
     await expect(page).toFill('#name', newName);
-    await page.click('[data-testid="article-update-button"]');
+    await expect(page).toClick('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
 
     expect(page).toMatch(newName);
