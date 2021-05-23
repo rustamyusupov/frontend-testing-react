@@ -52,11 +52,17 @@ describe('simple blog', () => {
     const name = faker.name.title();
 
     await page.goto(`${appUrl}/articles/4/edit`);
-    await expect(page).toFill('#name', name);
+    // eslint-disable-next-line no-param-reassign
+    await page.$eval('#name', (el) => { el.value = ''; });
+    await page.type('#name', name);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
+    const result = await page.$eval(
+      'tbody > tr:nth-child(1) > td:nth-child(2)',
+      (el) => el.innerText,
+    );
 
-    await expect(page).toMatch(name);
+    expect(result).toBe(name);
   });
 });
 // END
