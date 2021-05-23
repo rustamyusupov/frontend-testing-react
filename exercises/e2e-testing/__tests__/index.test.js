@@ -60,11 +60,11 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await expect(page).toClick('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
-    await page.goto(`${appUrl}/articles/${id}/edit`);
 
     const newName = faker.name.title();
 
+    const id = await page.evaluate((elem) => elem.innerText, (await page.$('[data-testid="articles"] [data-testid="article"]:last-child [data-testid="article-id"]')));
+    await page.goto(`${appUrl}/articles/${id}/edit`);
     await expect(page).toFill('#name', newName);
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
