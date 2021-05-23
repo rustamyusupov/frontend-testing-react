@@ -1,10 +1,7 @@
 // BEGIN
 require('expect-puppeteer');
 
-const faker = require('faker');
-
-const port = 5000;
-const appUrl = `http://localhost:${port}`;
+const appUrl = `http://localhost:5000`;
 
 describe('simple blog', () => {
   it('should open main page', async () => {
@@ -33,36 +30,35 @@ describe('simple blog', () => {
   });
 
   it('should create new article', async () => {
-    const name = faker.lorem.sentence();
-    const content = faker.lorem.paragraph();
-
     await page.goto(`${appUrl}/articles/new`);
-    await expect(page).toFillForm('form[data-testid="article-create-form"]', {
-      'article[name]': name,
-      'article[content]': content,
-    });
-    await expect(page).toSelect('[name="article[categoryId]"]', '1');
-    await expect(page).toClick('[data-testid="article-create-button"]');
+    await page.type('#name', 'new article');
+    await page.type('#category', 'optio quo quis');
+    await page.type('#content', 'some content');
+    await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
+    const result = await page.$eval(
+      'tbody > tr:last-child > td:nth-child(2)',
+      (el) => el.innerText,
+    );
+    const expected = 'new article';
 
-    expect(page).toMatch(name);
+    expect(result).toMatch(expected);
   });
 
   it('should edit article', async () => {
-    const name = faker.name.title();
-
     await page.goto(`${appUrl}/articles/4/edit`);
     // eslint-disable-next-line no-param-reassign
     await page.$eval('#name', (el) => { el.value = ''; });
-    await page.type('#name', name);
+    await page.type('#name', 'renamed article');
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
     const result = await page.$eval(
       'tbody > tr:nth-child(1) > td:nth-child(2)',
       (el) => el.innerText,
     );
+    const expected = 'renamed article';
 
-    expect(result).toBe(name);
+    expect(result).toBe(expected);
   });
 });
 // END
