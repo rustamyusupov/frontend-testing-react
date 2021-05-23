@@ -1,7 +1,7 @@
 // BEGIN
 require('expect-puppeteer');
 
-// const faker = require('faker');
+const faker = require('faker');
 
 const port = 5000;
 const appUrl = `http://localhost:${port}`;
@@ -26,29 +26,29 @@ describe('simple blog', () => {
   it('should open form', async () => {
     await page.goto(`${appUrl}/articles`);
     await page.click('[data-testid="article-create-link"]');
-    const result = await page.waitForSelector('[data-testid="article-create-form"]');
+    const expected = 'Create article';
 
-    expect(result).toBeTruthy();
+    await expect(page).toMatch(expected);
   });
 
   it('should create new article', async () => {
-    const name = '123'; // faker.lorem.sentence();
-    const content = 'Test'; //faker.lorem.paragraph();
+    const name = faker.lorem.sentence();
+    const content = faker.lorem.paragraph();
 
     await page.goto(`${appUrl}/articles/new`);
     await expect(page).toFillForm('form[data-testid="article-create-form"]', {
       'article[name]': name,
       'article[content]': content,
     });
-    await expect(page).toSelect('#category', '1');
+    await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await expect(page).toClick('[data-testid="article-create-button"]');
-    await page.waitForSelector('[data-testid="articles"]');
+    await page.waitForNavigation();
 
     expect(page).toMatch(name);
   });
 
   // it('should edit article', async () => {
-  //   const name = 'qwe'; // faker.lorem.sentence();
+  //   const name = faker.lorem.sentence();
 
   //   await page.goto(`${appUrl}/articles`);
   //   await page.click(
