@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.6.0",
+    "expect-puppeteer": "^5.0.3",
     "faker": "^5.5.3",
     "fastify": "^3.15.1",
     "fastify-formbody": "^5.0.0",

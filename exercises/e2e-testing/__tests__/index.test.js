@@ -1,7 +1,7 @@
 // BEGIN
 require('expect-puppeteer');
 
-const appUrl = `http://localhost:5000`;
+const appUrl = 'http://localhost:5000';
 
 describe('simple blog', () => {
   it('should open main page', async () => {
