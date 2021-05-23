@@ -37,7 +37,7 @@ describe('simple blog', () => {
     await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
     const result = await page.$eval(
-      'tbody > tr:last-child > td:nth-child(2)',
+      '[data-testid="article"]:last-child > [data-testid="article-name"]',
       (el) => el.innerText,
     );
     const expected = 'new article';
@@ -53,7 +53,7 @@ describe('simple blog', () => {
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
     const result = await page.$eval(
-      'tbody > tr:nth-child(1) > td:nth-child(2)',
+      '[data-testid="article"]:nth-child(1) > [data-testid="article-name"]',
       (el) => el.innerText,
     );
     const expected = 'renamed article';
