@@ -50,7 +50,7 @@ describe('simple blog', () => {
 
   it('should edit article', async () => {
     await page.goto(`${articlesUrl}/4/edit`);
-    await expect(page).toFillForm('form[data-testid="article-edit-form""]', {
+    await expect(page).toFillForm('form[data-testid="article-edit-form"]', {
       'article[name]': 'renamed article',
       'article[content]': 'some content',
     });
