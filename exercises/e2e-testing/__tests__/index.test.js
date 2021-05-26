@@ -31,6 +31,8 @@ describe('simple blog', () => {
   });
 
   it('should create new article', async () => {
+    const lastArticleNameSelector = '[data-testid="article"]:last-child > [data-testid="article-name"]';
+
     await page.goto(`${articlesUrl}/new`);
     await expect(page).toFillForm('form[data-testid="article-create-form"]', {
       'article[name]': 'new article',
@@ -39,20 +41,15 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    // const result = await page.$eval(
-    //   '[data-testid="article"]:last-child > [data-testid="article-name"]',
-    //   (el) => el.innerText,
-    // );
-    // const expected = 'new article';
+    const result = await page.$eval(lastArticleNameSelector, (el) => el.innerText);
+    const expectedName = 'new article';
 
-    // expect(result).toMatch(expected);
-    const lastArticleNameSelector = '[data-testid="article"]:last-child > [data-testid="article-name"]';
-    const expected = 'new article';
-
-    await expect(page).toSelect(lastArticleNameSelector, expected)
+    expect(result).toMatch(expectedName);
   });
 
   it('should edit article', async () => {
+    const firstArticleNameSelector = '[data-testid="article"]:first-child > [data-testid="article-name"]';
+
     await page.goto(`${articlesUrl}/4/edit`);
     await expect(page).toFillForm('form[data-testid="article-edit-form"]', {
       'article[name]': 'renamed article',
@@ -61,10 +58,7 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    const result = await page.$eval(
-      '[data-testid="article"]:nth-child(1) > [data-testid="article-name"]',
-      (el) => el.innerText,
-    );
+    const result = await page.$eval(firstArticleNameSelector, (el) => el.innerText);
     const expected = 'renamed article';
 
     expect(result).toBe(expected);
