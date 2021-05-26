@@ -50,9 +50,11 @@ describe('simple blog', () => {
 
   it('should edit article', async () => {
     await page.goto(`${articlesUrl}/4/edit`);
-    // eslint-disable-next-line no-param-reassign
-    await page.$eval('#name', (el) => { el.value = ''; });
-    await page.type('#name', 'renamed article');
+    await expect(page).toFillForm('form[data-testid="article-edit-form""]', {
+      'article[name]': 'renamed article',
+      'article[content]': 'some content',
+    });
+    await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
     const result = await page.$eval(
