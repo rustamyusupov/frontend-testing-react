@@ -2,6 +2,7 @@
 require('expect-puppeteer');
 
 const appUrl = 'http://localhost:5000';
+const articlesUrl = `${appUrl}/articles`;
 
 describe('simple blog', () => {
   it('should open main page', async () => {
@@ -12,7 +13,7 @@ describe('simple blog', () => {
   });
 
   it('should return articles', async () => {
-    await page.goto(`${appUrl}/articles`);
+    await page.goto(articlesUrl);
     const articles = await page.$$('[data-testid="articles"]');
     const result = articles.length;
     const expected = 0;
@@ -21,7 +22,7 @@ describe('simple blog', () => {
   });
 
   it('should open form', async () => {
-    await page.goto(`${appUrl}/articles`);
+    await page.goto(articlesUrl);
     await page.click('[data-testid="article-create-link"]');
     await page.waitForSelector('[data-testid="article-create-form"]');
     const expected = 'Create article';
@@ -30,7 +31,7 @@ describe('simple blog', () => {
   });
 
   it('should create new article', async () => {
-    await page.goto(`${appUrl}/articles/new`);
+    await page.goto(`${articlesUrl}/new`);
     await page.type('#name', 'new article');
     await page.type('#category', 'optio quo quis');
     await page.type('#content', 'some content');
@@ -46,7 +47,7 @@ describe('simple blog', () => {
   });
 
   it('should edit article', async () => {
-    await page.goto(`${appUrl}/articles/4/edit`);
+    await page.goto(`${articlesUrl}/4/edit`);
     // eslint-disable-next-line no-param-reassign
     await page.$eval('#name', (el) => { el.value = ''; });
     await page.type('#name', 'renamed article');
