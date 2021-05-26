@@ -4,7 +4,7 @@ require('expect-puppeteer');
 const appUrl = 'http://localhost:5000';
 const articlesUrl = `${appUrl}/articles`;
 
-const getNameSelector = position => `[data-testid="article"]:${position}-child > [data-testid="article-name"]`;
+const getNameSelector = (position) => `[data-testid="article"]:${position}-child > [data-testid="article-name"]`;
 
 describe('simple blog', () => {
   it('should open main page', async () => {
