@@ -4,6 +4,8 @@ require('expect-puppeteer');
 const appUrl = 'http://localhost:5000';
 const articlesUrl = `${appUrl}/articles`;
 
+const getNameSelector = position => `[data-testid="article"]:${position}-child > [data-testid="article-name"]`;
+
 describe('simple blog', () => {
   it('should open main page', async () => {
     await page.goto(appUrl);
@@ -31,8 +33,6 @@ describe('simple blog', () => {
   });
 
   it('should create new article', async () => {
-    const lastArticleNameSelector = '[data-testid="article"]:last-child > [data-testid="article-name"]';
-
     await page.goto(`${articlesUrl}/new`);
     await expect(page).toFillForm('form[data-testid="article-create-form"]', {
       'article[name]': 'new article',
@@ -41,15 +41,13 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    const result = await page.$eval(lastArticleNameSelector, (el) => el.innerText);
+    const result = await page.$eval(getNameSelector('last'), (el) => el.innerText);
     const expectedName = 'new article';
 
     expect(result).toMatch(expectedName);
   });
 
   it('should edit article', async () => {
-    const firstArticleNameSelector = '[data-testid="article"]:first-child > [data-testid="article-name"]';
-
     await page.goto(`${articlesUrl}/4/edit`);
     await expect(page).toFillForm('form[data-testid="article-edit-form"]', {
       'article[name]': 'renamed article',
@@ -58,7 +56,7 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-update-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    const result = await page.$eval(firstArticleNameSelector, (el) => el.innerText);
+    const result = await page.$eval(getNameSelector('first'), (el) => el.innerText);
     const expected = 'renamed article';
 
     expect(result).toBe(expected);
