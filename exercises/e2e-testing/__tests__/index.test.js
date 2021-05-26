@@ -32,16 +32,11 @@ describe('simple blog', () => {
 
   it('should create new article', async () => {
     await page.goto(`${articlesUrl}/new`);
-    // await page.type('#name', 'new article');
-    // await page.type('#category', 'optio quo quis');
-    // await page.type('#content', 'some content');
-
     await expect(page).toFillForm('form[data-testid="article-create-form"]', {
       'article[name]': 'new article',
       'article[content]': 'some content',
     });
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
-  
     await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
     const result = await page.$eval(
