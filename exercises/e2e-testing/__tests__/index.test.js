@@ -39,13 +39,17 @@ describe('simple blog', () => {
     await expect(page).toSelect('[name="article[categoryId]"]', '1');
     await page.click('[data-testid="article-create-button"]');
     await page.waitForSelector('[data-testid="articles"]');
-    const result = await page.$eval(
-      '[data-testid="article"]:last-child > [data-testid="article-name"]',
-      (el) => el.innerText,
-    );
+    // const result = await page.$eval(
+    //   '[data-testid="article"]:last-child > [data-testid="article-name"]',
+    //   (el) => el.innerText,
+    // );
+    // const expected = 'new article';
+
+    // expect(result).toMatch(expected);
+    const lastArticleNameSelector = '[data-testid="article"]:last-child > [data-testid="article-name"]';
     const expected = 'new article';
 
-    expect(result).toMatch(expected);
+    await expect(page).toSelect(lastArticleNameSelector, expected)
   });
 
   it('should edit article', async () => {
