@@ -2,7 +2,9 @@
 // BEGIN
 const appUrl = 'http://localhost:8080';
 
-beforeAll(async () => await page.goto(appUrl));
+beforeAll(async () => {
+  await page.goto(appUrl);
+});
 
 describe('app', () => {
   it('should open app', async () => {
