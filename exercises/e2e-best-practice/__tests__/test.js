@@ -10,12 +10,11 @@ describe('app', () => {
     await expect(page).toMatchElement('[data-testid="add-task-button"]');
   });
 
-  it('should create task', async () => {
+  it('should create tasks', async () => {
     const createTask = async (text) => {
       await expect(page).toFillForm('form', { text });
-      
-      return page.click('[data-testid=add-task-button]');
-    }
+      await page.click('[data-testid=add-task-button]');
+    };
 
     await createTask('test1');
     await createTask('test2');
@@ -27,7 +26,8 @@ describe('app', () => {
   it('should delete task', async () => {
     await page.click('[data-testid=remove-task-1]');
 
-    await expect(page).not.toMatch('test1');  
-  });  
+    await expect(page).not.toMatch('test1');
+    await expect(page).toMatch('test2');
+  });
 });
 // END
