@@ -4,8 +4,8 @@ env:
   jest/globals: true
 
 extends:
-  - "airbnb"
-  - "plugin:jest/recommended"
+  - 'airbnb'
+  - 'plugin:jest/recommended'
 
 settings:
   react:
