@@ -24,43 +24,49 @@ const getResponse = (char) => flow(map(toLower), filter(startsWith(char)), map(c
 
 describe('autocomplete', () => {
   it('should render countries', async () => {
-    ['a', 'al', 'alg'].forEach((char) => {
-      nock(host)
-        .get('/countries')
-        .query({ term: char })
-        .reply(200, getResponse(char)(countries));
-    });
+    const scopes = ['a', 'al', 'alg'].map((char) => nock(host)
+      .get('/countries')
+      .query({ term: char })
+      .reply(200, getResponse(char)(countries)));
 
     const { container } = render(<Autocomplete />);
     const input = screen.getByRole('textbox');
 
     userEvent.type(input, 'a');
-
     await waitFor(() => {
-      expect(screen.queryByText('Albania')).toBeVisible();
-      expect(screen.queryByText('Algeria')).toBeVisible();
-      expect(screen.queryByText('Armenia')).toBeVisible();
+      const requestIsPerformed = scopes[0].isDone();
+      expect(requestIsPerformed).toBe(true);
     });
+
+    const list = screen.getByRole('list');
+
+    expect(list).toContainElement(screen.getByText('Albania'));
+    expect(list).toContainElement(screen.getByText('Algeria'));
+    expect(list).toContainElement(screen.getByText('Armenia'));
 
     userEvent.type(input, 'l');
-
     await waitFor(() => {
-      expect(screen.queryByText('Albania')).toBeVisible();
-      expect(screen.queryByText('Algeria')).toBeVisible();
-      expect(screen.queryByText('Armenia')).toBeNull();
+      const requestIsPerformed = scopes[1].isDone();
+      expect(requestIsPerformed).toBe(true);
     });
+
+    expect(list).toContainElement(screen.getByText('Albania'));
+    expect(list).toContainElement(screen.getByText('Algeria'));
+    expect(list).not.toContainElement(screen.queryByText('Armenia'));
 
     userEvent.type(input, 'g');
-
     await waitFor(() => {
-      expect(screen.queryByText('Albania')).toBeNull();
-      expect(screen.queryByText('Algeria')).toBeVisible();
-      expect(screen.queryByText('Armenia')).toBeNull();
+      const requestIsPerformed = scopes[2].isDone();
+      expect(requestIsPerformed).toBe(true);
     });
+
+    expect(list).not.toContainElement(screen.queryByText('Albania'));
+    expect(list).toContainElement(screen.getByText('Algeria'));
+    expect(list).not.toContainElement(screen.queryByText('Armenia'));
 
     userEvent.clear(input);
 
-    expect(container.querySelector('ul')).toBeNull();
+    expect(container.querySelector('ul')).not.toBeInTheDocument();
   });
 });
 // END
