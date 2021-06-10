@@ -38,7 +38,7 @@ describe('autocomplete', () => {
       expect(requestIsPerformed).toBe(true);
     });
 
-    const list = screen.getByRole('list');
+    const list = await screen.findByRole('list');
 
     expect(list).toContainElement(screen.getByText('Albania'));
     expect(list).toContainElement(screen.getByText('Algeria'));
